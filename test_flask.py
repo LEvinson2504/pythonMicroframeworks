@@ -1,6 +1,6 @@
 '''
 
-           test_bottle.py
+           test_flask.py
     
 @summary:  Comparing (RAM usage) of different webframeworks
 @since:    4 Mar 2016
@@ -14,24 +14,29 @@
            
 '''
 
-from bottle import route, run, __version__ # pip install bottle
+from flask import Flask, __version__ # pip install Flask
+app = Flask(__name__)
 
-@route('/hello/:name')
-def index(name='World'):
-    return 'Hello %s!' % name
+@app.route('/hello/<name>')
+def hello(name="Earth"):
+    return "Hello %s!" % name
 
-def run_server(host='localhost', port=8001):
-    run(host=host, port=port)
+def run_flask_simplest():
+    app.run()
     
-def url(host='localhost', port=8001):
+def run_server(host='127.0.0.1', port=5000):
+    app.run(host=host, port=port)
+    
+def url(host='127.0.0.1', port=5000):
     return "http://%s:%s/hello/World" % (host, port)
 
 def version():
-    return ("bottle", __version__)
+    return ("flask", __version__)
     
 if __name__ == '__main__':
     print "%s %s" % version()
     print "try:", url()
+    # run_flask_simplest()
     run_server()
     
     

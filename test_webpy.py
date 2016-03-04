@@ -30,7 +30,7 @@ class hello:
 def run_simplest():
     app.run(port=port)
     
-def run_webpy(host="localhost", port=8080):
+def run_server(host="localhost", port=8080):
     print "web.py:", 
     web.httpserver.runsimple(app.wsgifunc(), (host, port))
    
@@ -38,11 +38,11 @@ def url(host='localhost', port=8080):
     return "http://%s:%s/World" % (host, port)
 
 def version():
-    return web.__version__
+    return ("web.py", web.__version__)
     
 if __name__ == '__main__':
-    #print "%s %s" % version()
-    #print "try:", url()
-    run_webpy()
+    print "%s %s" % version()
+    print "try:", url()
+    run_server()
     
     

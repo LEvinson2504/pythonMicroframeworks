@@ -22,7 +22,7 @@ from multiprocessing import Process
 import psutil # pip install psutil
 # print psutil.__version__
 
-import test_bottle, test_webpy
+import test_bottle, test_webpy, test_flask
 
 def memory_usage(PID=None):
     # if PID==None: PID=os.getpid() # default psutil behaviour anyways
@@ -42,22 +42,30 @@ def startProcesses(host="localhost", portstart=8000):
     processes=[]
     sleepBetween=0.3
     
-    for fn, v, url, name in ((test_bottle.run_bottle, test_bottle.version, test_bottle.url, "bottle"),
-                             (test_webpy.run_webpy, test_webpy.version, test_webpy.url, "web.py"),
-                             ):
-        p=Process(target=fn, args=(host, port))
-        p.start()
-        time.sleep(sleepBetween)
+    """
+    for fn, v, url in ((test_bottle.run_bottle, test_bottle.version, test_bottle.url),
+                       (test_webpy.run_webpy, test_webpy.version, test_webpy.url),
+                       ()):
+       """
+    for module in ((test_bottle, test_webpy, test_flask)):
+        run_server=getattr(module, 'run_server')
+        v=getattr(module, 'version')
+        url=getattr(module, 'url')
         
-        processes.append((p, name+" "+v(), url(host,port) ))
+        p=Process(target=run_server, args=(host, port))
+        p.start()
+        
+        processes.append((p, "%s %s" % v(), url(host,port) ))
         port+=1
+        
+        time.sleep(sleepBetween)
         
     sleep=1
     time.sleep(sleep)
     print "Waited %s seconds." % sleep
     print 
     
-    formatter="%18s %7s PID=%5d MEM(rss,vms)=(%4.2f, %4.2f) MiB  %s"
+    formatter="%-18s %7s PID=%5d MEM(rss,vms)=(%4.2f,%6.2f) MiB  %s"
     
     # 'posix', 'nt', 'os2', 'ce', 'java', 'riscos'.
     if os.name == 'nt': osname="Windows"
@@ -69,7 +77,7 @@ def startProcesses(host="localhost", portstart=8000):
     
     pid=os.getpid()
     mem=memory_usage()
-    print formatter % ("main", osname, pid, mem[0], mem[1], "")
+    print formatter % ("main "+VERSION, osname, pid, mem[0], mem[1], "")
     
 if __name__ == '__main__':
     startProcesses()
