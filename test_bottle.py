@@ -27,7 +27,7 @@ def url(host='localhost', port=8001):
     return "http://%s:%s/hello/World" % (host, port)
 
 def version():
-    return ("bottle", __version__)
+    return __version__
     
 if __name__ == '__main__':
     print "%s %s" % version()

@@ -14,39 +14,62 @@
            
 '''
 
-import os, time
-import psutil
+VERSION=                   "0.1.0"
+
+import os, time, sys
 from multiprocessing import Process
-import test_bottle
+
+import psutil # pip install psutil
+# print psutil.__version__
+
+import test_bottle, test_webpy
 
 def memory_usage(PID=None):
-    if PID==None: PID=os.getpid()
+    # if PID==None: PID=os.getpid() # default psutil behaviour anyways
     process = psutil.Process(PID)
-    # print "PID=%d"%os.getpid(), 
-    print process.memory_info()
-    mem = process.memory_info()[0] / float(2 ** 20)
-    return mem
+    # print process.memory_info()
+    rss = process.memory_info().rss / float(2 ** 20)
+    vms = process.memory_info().vms / float(2 ** 20)
+    return (rss, vms)
+
+
 
 def startProcesses(host="localhost", portstart=8000):
     
     print "Memory main process: ", memory_usage()
+    print "Start processes:"
     port=portstart
     processes=[]
-    for fn,name in ((test_bottle.run_bottle,"bottle"),
-               ):
+    sleepBetween=0.3
+    
+    for fn, v, url, name in ((test_bottle.run_bottle, test_bottle.version, test_bottle.url, "bottle"),
+                             (test_webpy.run_webpy, test_webpy.version, test_webpy.url, "web.py"),
+                             ):
         p=Process(target=fn, args=(host, port))
         p.start()
-        processes.append((p,name))
+        time.sleep(sleepBetween)
         
-    sleep=2
-    print "processes started, waiting %s seconds:" % sleep
+        processes.append((p, name+" "+v(), url(host,port) ))
+        port+=1
+        
+    sleep=1
     time.sleep(sleep)
+    print "Waited %s seconds." % sleep
+    print 
     
-    for p,name in processes:
-        print "%10s PID=%d mem=%4.2f MiB" % (name, p.pid, memory_usage(p.pid))  
+    formatter="%18s %7s PID=%5d MEM(rss,vms)=(%4.2f, %4.2f) MiB  %s"
+    
+    # 'posix', 'nt', 'os2', 'ce', 'java', 'riscos'.
+    if os.name == 'nt': osname="Windows"
+    if os.name == 'posix': osname="Posix" 
+    
+    for p, name, url in processes:
+        mem=memory_usage(p.pid)
+        print formatter % (name, osname, p.pid, mem[0], mem[1], url)  
     
     pid=os.getpid()
-    print "%10s PID=%d mem=%4.2f MiB" % ("main", pid, memory_usage())
+    mem=memory_usage()
+    print formatter % ("main", osname, pid, mem[0], mem[1], "")
     
 if __name__ == '__main__':
     startProcesses()
