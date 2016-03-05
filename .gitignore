@@ -1,6 +1,7 @@
 .project
 .pydevproject
 *.md.html
+logging.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
