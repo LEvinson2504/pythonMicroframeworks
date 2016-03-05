@@ -16,22 +16,26 @@
 
 from bottle import route, run, __version__ # pip install bottle
 
+HOST, PORT= '127.0.0.1', 8080
+
 @route('/hello/:name')
 def index(name='World'):
     return 'Hello %s!' % name
 
-def run_server(host='localhost', port=8001):
+def run_server(host=HOST, port=PORT):
+    # run()
     run(host=host, port=port)
     
-def url(host='localhost', port=8001):
+def url(host=HOST, port=PORT):
     return "http://%s:%s/hello/World" % (host, port)
 
 def version():
     return ("bottle", __version__)
     
 if __name__ == '__main__':
-    print "%s %s" % version()
-    print "try:", url()
-    run_server()
+    # run_server()
     
+    from sys import argv as a; port=int(a[1]) if len(a)>1 else PORT # get port from commandline argument
+    
+    run_server(port=port)
     

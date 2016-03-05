@@ -15,6 +15,9 @@
 '''
 
 from flask import Flask, __version__ # pip install Flask
+
+HOST, PORT= '127.0.0.1', 5000
+
 app = Flask(__name__)
 
 @app.route('/hello/<name>')
@@ -24,21 +27,22 @@ def hello(name="Earth"):
 def run_flask_simplest():
     app.run()
     
-def run_server(host='127.0.0.1', port=5000):
+def run_server(host=HOST, port=PORT):
     print "Flask", 
-    import time; time.sleep(0.1) # only because of printing
+    from time import sleep; sleep(0.1) # only because of stdout / stderr printing
     app.run(host=host, port=port)
     
-def url(host='127.0.0.1', port=5000):
+def url(host=HOST, port=PORT):
     return "http://%s:%s/hello/World" % (host, port)
 
 def version():
     return ("flask", __version__)
     
 if __name__ == '__main__':
-    print "%s %s" % version()
-    print "try:", url()
     # run_flask_simplest()
-    run_server()
+    
+    from sys import argv as a; port=int(a[1]) if len(a)>1 else PORT # get port from commandline argument
+    
+    run_server(port=port)
     
     

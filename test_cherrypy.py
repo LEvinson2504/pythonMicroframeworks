@@ -16,6 +16,8 @@
 
 import cherrypy # pip install cherrypy
 
+HOST, PORT= '127.0.0.1', 8080
+
 class HelloWorld(object):
     def index(self, name="Earth"):
         return "Hello %s!" % name
@@ -28,7 +30,7 @@ def run_cherrypy_simplest():
     cherrypy.quickstart(HelloWorld())
     
    
-def run_server(host='127.0.0.1', port=8080):
+def run_server(host=HOST, port=PORT):
     print "CherryPy" 
     import time; time.sleep(0.1) # only because of printing
     
@@ -38,16 +40,17 @@ def run_server(host='127.0.0.1', port=8080):
     cherrypy.quickstart(HelloWorld(), config={'/': {'tools.gzip.on': True}} )
     
     
-def url(host='127.0.0.1', port=8080):
+def url(host=HOST, port=PORT):
     return "http://%s:%s/?name=World" % (host, port)
 
 def version():
     return ("cherrypy", cherrypy.__version__)
     
 if __name__ == '__main__':
-    print "%s %s" % version()
-    print "try:", url()
     # run_cherrypy_simplest()
-    run_server()
+    
+    from sys import argv as a; port=int(a[1]) if len(a)>1 else PORT # get port from commandline argument
+    
+    run_server(port=port)
     
     

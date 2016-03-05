@@ -16,6 +16,10 @@
 
 import web # pip install web.py
 
+# HOST, PORT= '0.0.0.0', 8080
+HOST, PORT= '127.0.0.1', 8080
+
+
 urls = (
     '/(.*)', 'hello'
 )
@@ -28,21 +32,24 @@ class hello:
         return 'Hello, ' + name + '!'
 
 def run_simplest():
-    app.run(port=port)
+    app.run() 
     
-def run_server(host="localhost", port=8080):
+def run_server(host=HOST, port=PORT):
     print "web.py:", 
     web.httpserver.runsimple(app.wsgifunc(), (host, port))
    
-def url(host='localhost', port=8080):
+def url(host=HOST, port=PORT):
     return "http://%s:%s/World" % (host, port)
 
 def version():
     return ("web.py", web.__version__)
     
 if __name__ == '__main__':
-    print "%s %s" % version()
-    print "try:", url()
-    run_server()
+    # run_simplest()
+    
+    from sys import argv as a; port=int(a[1]) if len(a)>1 else PORT # get port from commandline argument
+
+    run_server(port=port)
+    
     
     

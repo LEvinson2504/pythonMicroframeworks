@@ -12,9 +12,10 @@
 '''
 
 
-import tornado.ioloop
-import tornado.web
+import tornado.ioloop, tornado.web #  pip install tornado
 from tornado import version as tornadoversion
+
+HOST, PORT= '127.0.0.1', 8888
 
 class MainHandler(tornado.web.RequestHandler):
     def get(self):
@@ -34,7 +35,7 @@ def run_tornado_simplest():
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
     
-def run_server(host='127.0.0.1', port=8888):
+def run_server(host=HOST, port=PORT):
     print "tornado" 
     import time; time.sleep(0.1) # only because of printing
     
@@ -42,15 +43,18 @@ def run_server(host='127.0.0.1', port=8888):
     app.listen(port=port, address=host)
     tornado.ioloop.IOLoop.current().start()
     
-def url(host='127.0.0.1', port=8888):
+def url(host=HOST, port=PORT):
     return "http://%s:%s/hello?name=World" % (host, port)
 
 def version():
     return ("tornado", tornadoversion )
     
 if __name__ == '__main__':
-    print "%s %s" % version()
-    print "try:", url()
     # run_tornado_simplest()
-    run_server()
+    
+    from sys import argv as a; port=int(a[1]) if len(a)>1 else PORT # get port from commandline argument
+    
+    run_server(port=port)
+    
+    
     
