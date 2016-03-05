@@ -1,29 +1,30 @@
+compare.py 2000 1
 Started independent subprocesses: bottle webpy flask cherrypy tornado
 Waited 2 seconds, measuring memory consumption now:
 
-bottle 0.12.9      Windows PID= 3780 MEM(rss,vms)=(19.29, 15.03) MiB  http://127.0.0.1:8000/hello/World
-web.py 0.37        Windows PID= 7468 MEM(rss,vms)=(18.41, 14.05) MiB  http://127.0.0.1:8001/World
-flask 0.10.1       Windows PID=11652 MEM(rss,vms)=(22.79, 17.66) MiB  http://127.0.0.1:8002/hello/World
-cherrypy 4.0.0     Windows PID=10404 MEM(rss,vms)=(22.31, 17.79) MiB  http://127.0.0.1:8003/?name=World
-tornado 4.3        Windows PID=13004 MEM(rss,vms)=(21.28, 16.71) MiB  http://127.0.0.1:8004/hello?name=World
-main 0.2.0         Windows PID=12456 MEM(rss,vms)=(35.06, 30.16) MiB  
+bottle 0.12.9      Windows PID= 9892 MEM(rss,vms)=(19.26, 15.00) MiB  http://127.0.0.1:8000/hello/World
+web.py 0.37        Windows PID= 7948 MEM(rss,vms)=(18.39, 14.05) MiB  http://127.0.0.1:8001/World
+flask 0.10.1       Windows PID=12352 MEM(rss,vms)=(22.80, 17.67) MiB  http://127.0.0.1:8002/hello/World
+cherrypy 4.0.0     Windows PID= 4844 MEM(rss,vms)=(22.30, 17.79) MiB  http://127.0.0.1:8003/?name=World
+tornado 4.3        Windows PID=11032 MEM(rss,vms)=(21.28, 16.72) MiB  http://127.0.0.1:8004/hello?name=World
+main 0.2.0         Windows PID= 5588 MEM(rss,vms)=(34.82, 29.95) MiB  
 
-Now hammering each of those servers 800 times, with a 1.0 seconds timeout:  bottle web.py flask cherrypy tornado - Done
-Concurrent hammering 5 * 800 urls took 18.8 secs. Results: (200 = OK; -1 = exception, probably 'requests.exceptions.ReadTimeout')
+Now hammering each of those servers 2000 times, with a 1.0 seconds timeout:  bottle web.py flask cherrypy tornado - Done
+Concurrent hammering 5 * 2000 urls took 46.4 secs. Results: (200 = OK; -1 = exception, probably 'requests.exceptions.ReadTimeout')
 
-bottle 0.12.9           http://127.0.0.1:8000/hello/World   took 0.0039 seconds/call, with 100.0% success - Counter({200: 800})
-web.py 0.37                   http://127.0.0.1:8001/World   took 0.0074 seconds/call, with  54.9% success - Counter({200: 439, -1: 361})
-flask 0.10.1            http://127.0.0.1:8002/hello/World   took 0.0042 seconds/call, with 100.0% success - Counter({200: 800})
-cherrypy 4.0.0          http://127.0.0.1:8003/?name=World   took 0.0040 seconds/call, with 100.0% success - Counter({200: 800})
-tornado 4.3        http://127.0.0.1:8004/hello?name=World   took 0.0039 seconds/call, with 100.0% success - Counter({200: 800})
+bottle 0.12.9           http://127.0.0.1:8000/hello/World   took 0.0038 seconds/call, with 100.0% success - Counter({200: 2000})
+web.py 0.37                   http://127.0.0.1:8001/World   took 0.0066 seconds/call, with  23.0% success - Counter({-1: 1540, 200: 460})
+flask 0.10.1            http://127.0.0.1:8002/hello/World   took 0.0047 seconds/call, with 100.0% success - Counter({200: 2000})
+cherrypy 4.0.0          http://127.0.0.1:8003/?name=World   took 0.0040 seconds/call, with 100.0% success - Counter({200: 2000})
+tornado 4.3        http://127.0.0.1:8004/hello?name=World   took 0.0040 seconds/call, with 100.0% success - Counter({200: 2000})
 
 Now after all those calls, measure memory again ...  Waited 2 seconds, measuring memory consumption now:
 
-bottle 0.12.9      Windows PID= 3780 MEM(rss,vms)=(19.37, 15.04) MiB  
-web.py 0.37        Windows PID= 7468 MEM(rss,vms)=(20.44, 16.05) MiB  
-flask 0.10.1       Windows PID=11652 MEM(rss,vms)=(23.43, 18.19) MiB  
-cherrypy 4.0.0     Windows PID=10404 MEM(rss,vms)=(23.52, 19.03) MiB  
-tornado 4.3        Windows PID=13004 MEM(rss,vms)=(22.59, 17.82) MiB  
-main 0.2.0         Windows PID=12456 MEM(rss,vms)=(50.53, 46.19) MiB  
+bottle 0.12.9      Windows PID= 9892 MEM(rss,vms)=(19.43, 15.11) MiB  
+web.py 0.37        Windows PID= 7948 MEM(rss,vms)=(21.79, 17.41) MiB  
+flask 0.10.1       Windows PID=12352 MEM(rss,vms)=(23.60, 18.42) MiB  
+cherrypy 4.0.0     Windows PID= 4844 MEM(rss,vms)=(23.64, 19.09) MiB  
+tornado 4.3        Windows PID=11032 MEM(rss,vms)=(22.79, 18.07) MiB  
+main 0.2.0         Windows PID= 5588 MEM(rss,vms)=(54.28, 49.71) MiB  
 
-Killing PIDs: 3780 (bottle 0.12.9) 7468 (web.py 0.37) 11652 (flask 0.10.1) 10404 (cherrypy 4.0.0) 13004 (tornado 4.3)
+Killing PIDs: 9892 (bottle 0.12.9) 7948 (web.py 0.37) 12352 (flask 0.10.1) 4844 (cherrypy 4.0.0) 11032 (tornado 4.3)

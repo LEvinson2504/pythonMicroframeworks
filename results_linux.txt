@@ -1,0 +1,30 @@
+python compare.py 2000 1
+Started independent subprocesses: bottle webpy flask cherrypy tornado
+Waited 2 seconds, measuring memory consumption now:
+
+bottle 0.12.9        Posix PID=30401 MEM(rss,vms)=(14.23, 42.14) MiB  http://127.0.0.1:8000/hello/World
+web.py 0.37          Posix PID=30402 MEM(rss,vms)=(13.95,630.24) MiB  http://127.0.0.1:8001/World
+flask 0.10.1         Posix PID=30413 MEM(rss,vms)=(18.04, 53.83) MiB  http://127.0.0.1:8002/hello/World
+cherrypy 5.0.1       Posix PID=30416 MEM(rss,vms)=(16.20,658.18) MiB  http://127.0.0.1:8003/?name=World
+tornado 4.3          Posix PID=30430 MEM(rss,vms)=(16.28, 53.91) MiB  http://127.0.0.1:8004/hello?name=World
+main 0.2.0           Posix PID=30398 MEM(rss,vms)=(47.25,101.14) MiB
+
+Now hammering each of those servers 2000 times, with a 1.0 seconds timeout:  bottle web.py flask cherrypy tornado - Done
+Concurrent hammering 5 * 2000 urls took 46.3 secs. Results: (200 = OK; -1 = exception, probably 'requests.exceptions.ReadTimeout')
+
+bottle 0.12.9           http://127.0.0.1:8000/hello/World   took 0.0037 seconds/call, with 100.0% success - Counter({200: 2000})
+web.py 0.37                   http://127.0.0.1:8001/World   took 0.0054 seconds/call, with 100.0% success - Counter({200: 2000})
+flask 0.10.1            http://127.0.0.1:8002/hello/World   took 0.0043 seconds/call, with 100.0% success - Counter({200: 2000})
+cherrypy 5.0.1          http://127.0.0.1:8003/?name=World   took 0.0055 seconds/call, with 100.0% success - Counter({200: 2000})
+tornado 4.3        http://127.0.0.1:8004/hello?name=World   took 0.0043 seconds/call, with 100.0% success - Counter({200: 2000})
+
+Now after all those calls, measure memory again ...  Waited 2 seconds, measuring memory consumption now:
+
+bottle 0.12.9        Posix PID=30401 MEM(rss,vms)=(14.23, 42.14) MiB
+web.py 0.37          Posix PID=30402 MEM(rss,vms)=(14.03,630.24) MiB
+flask 0.10.1         Posix PID=30413 MEM(rss,vms)=(18.70, 54.34) MiB
+cherrypy 5.0.1       Posix PID=30416 MEM(rss,vms)=(16.88,658.32) MiB
+tornado 4.3          Posix PID=30430 MEM(rss,vms)=(19.95, 57.36) MiB
+main 0.2.0           Posix PID=30398 MEM(rss,vms)=(55.31,650.83) MiB
+
+Killing PIDs: 30401 (bottle 0.12.9) 30402 (web.py 0.37) 30413 (flask 0.10.1) 30416 (cherrypy 5.0.1) 30430 (tornado 4.3)

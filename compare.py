@@ -6,6 +6,7 @@
 @since:    4 Mar 2016
 @author:   Andreas
 @home      github.com/drandreaskrueger/pythonMicroframeworks
+
 @license:  MIT but please donate:
 @bitcoin:  14EyWS5z8Y5kgwq52D3qeZVor1rUsdNYJy
 
@@ -16,7 +17,7 @@
            http://nuald.blogspot.de/2011/08/web-application-framework-comparison-by.html
 '''
 
-VERSION=                   "0.2.0"
+VERSION=                   "0.3.9"
 
 import os, time, sys, multiprocessing, subprocess, threading
 from collections import Counter
@@ -35,6 +36,8 @@ TIMEOUT=1.0
 
 def startProcessesTotallyIndependent(portstart=8000, stdout=sys.stdout, stderr=sys.stderr):
     """
+    Start all the frameworks, and return their (process, name&version, and url).
+     
     This one works. And the memory measurement is independent. Not like in 'obsolete.py'.
     
     This starts the processes as completely separate 'python name.py 8888' subprocesses.
@@ -72,7 +75,12 @@ def startProcessesTotallyIndependent(portstart=8000, stdout=sys.stdout, stderr=s
 
 
 def memory_usage(pid=None):
+    """
+    The first 2 numbers from memory_info. Converted to MiB.
+    Strangely different on Windows & Linux. See README.md
+    """ 
     # if PID==None: PID=os.getpid() # default psutil behaviour anyways
+    # print psutil.__version__
     process = psutil.Process(pid)
     pmi=process.memory_info()
     rss = pmi.rss / float(2 ** 20)
@@ -80,6 +88,11 @@ def memory_usage(pid=None):
     return (rss, vms)
 
 def measureMemory(processes):
+    """
+    show table
+    one line for each process == framework
+    with name&version, OS, PID, memory usage, url 
+    """  
     sleep=2
     time.sleep(sleep)
     print "Waited %s seconds, measuring memory consumption now:" % sleep
@@ -102,6 +115,8 @@ def measureMemory(processes):
 ####################
 
 def killEm(processes):
+    """don't leave zombie processes"""
+    
     print "\nKilling PIDs:", 
     for p, name, _ in processes:
         print "%d (%s)" % (p.pid, name),
@@ -111,6 +126,10 @@ def killEm(processes):
 ####################
 
 def hammer_thread(url, results, timeout):
+    """
+    inside one thread: get url, store status_code, 
+    e.g. 200==OK, or -1 for exception raised
+    """
     try:
         response = requests.get(url, timeout=timeout)
     except Exception as e:
@@ -119,27 +138,39 @@ def hammer_thread(url, results, timeout):
     else:
         results.append(response.status_code)
 
+
 def hammer(url, rep, timeout=TIMEOUT):
+    """
+    Start 'rep' such threads.
+    Measure total time. Return histogram (Counter) of status_codes. 
+    """
     T=time.time()
     threads, results = [],[]
     for _ in range(rep):
         t=threading.Thread(target=hammer_thread, args=(url, results, timeout))
         t.start()
         threads.append(t)
-
     for t in threads: t.join()
+    
     duration = time.time()-T
     return duration, Counter(results)
     
 def test_hammer(rep=REPETITIONS):
+    """DOS attack on google :-)"""
+    
     url="http://www.google.de"
     t,C=hammer(url, rep)
-    
     rate=float(C[200])/sum(dict(C).values()) # percentage of http response 200 == OK
     print "%5.1f seconds with %5.1f%% success rate - %s"% (t, 100*rate, C)
 
 def hammerLocalhost(processes, rep=REPETITIONS, timeout=TIMEOUT):
-    print"\nNow hammering each of those servers %d times, with a %.1f seconds timeout: " % (rep, timeout), 
+    """
+    Hammer all frameworks, one after the other.
+    Show results. Now it is good that we've redirected stdout&stderr.
+    """
+    
+    print"\nNow hammering each of those servers ",
+    print "%d times, with a %.1f seconds timeout: " % (rep, timeout), 
     time.sleep(1)
     
     results=[]
@@ -165,6 +196,15 @@ def hammerLocalhost(processes, rep=REPETITIONS, timeout=TIMEOUT):
 ####################
 
 def measure2(rep=REPETITIONS, timeout=TIMEOUT):
+    """
+    The whole thing:
+      Start processes.
+      Measure memory.
+      Hammer servers.
+      Measure memory.
+      Kill processes.
+    """
+     
     f=open("logging.txt", "w")
     stdout=stderr=f
     
@@ -182,8 +222,10 @@ def measure2(rep=REPETITIONS, timeout=TIMEOUT):
     killEm(processes)
     f.close()
     
+    
 if __name__ == '__main__':
-    # test_hammer()
+    # print memory_usage(); exit()
+    # test_hammer(rep=100); exit() 
     
     from sys import argv as a
     rep    =  int(a[1]) if len(a)>1 else REPETITIONS 
