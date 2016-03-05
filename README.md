@@ -7,7 +7,7 @@ comparison of (memory usage of)
 * web.py
  
  
-### Usage
+### Quickstart
 
 Prepare machine with tools and python pip; and upgrade pip, and install all frameworks:
 
@@ -39,20 +39,21 @@ See
 
 #### Main findings:
 * There is a big discrepancy between ``rss``, and ``vms`` memory usage on Linux and Windows, see [psutil](http://pythonhosted.org/psutil/#psutil.Process.memory_info) tool. Hopefully, psutil 4.0.0 [will be more useful](http://pythonhosted.org/psutil/#psutil.Process.memory_full_info), my 3.3.0 does not have ``memory_full_info()`` yet.
-* All my measurements show much more memory usage than in this [2011 examination](http://nuald.blogspot.de/2011/08/web-application-framework-comparison-by.html) - but those were older versions, too.
+* Most of my measurements show more memory usage than this [2011 examination](http://nuald.blogspot.de/2011/08/web-application-framework-comparison-by.html) - but those were older versions.
 * *web.py* is slower, especially on Windows, hammering takes ~60% longer as for any of the others.
-* *web.py* is the first to timeout on windows.
-* *tornado* is the first to timeout on Linux.
+* *web.py* is the first to timeout on *Windows*.
+* *tornado* is the first to timeout on *Linux*.
 * After hammering, the memory usage is higher.
   * only for *bottle*, the effect is < 1%. *Bottle seems to have the best memory management.*
-  * *all* the other frameworks need considerably more memory after 2000 url requests.
+  * *all* the other frameworks need considerably more memory after having served 2000 url requests.
   * the effect is stronger on *Windows* for most of them. 
-  * for *tornado* the effect is stronger on *Linux*, it needs 23% more memory after 2000 url requests.
+  * for *tornado* the effect is stronger on *Linux* - it needs 23% more memory after 2000 url requests.
+* Some of the frameworks are probably really powerful, but also more difficult to understand. But before my final verdict, I guess I need to sleep. This was ~9 hours of straight coding. *After* a full working day. :-) 
   
-Please help me improve this. It was a one-night-hack. Not everything is super-elegant yet. But it works.
+Please help me improve this, fork it. It was a one-night-hack. Not everything is super-elegant yet. But it works.
 
 ## Donationware
-If you like this, show it: ``[BTC] 14EyWS5z8Y5kgwq52D3qeZVor1rUsdNYJy``. Thanks, much appreciated.
+Very important - **If you like this, show it:** `` [BTC] 14EyWS5z8Y5kgwq52D3qeZVor1rUsdNYJy ``. Thanks, much appreciated.
 
 
 
