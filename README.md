@@ -67,7 +67,7 @@ Memory measurement via ``psutil``:
 Please help, fork it, improve it. It was a one-night-hack. Not everything is super-elegant yet. But it works.  
 ***NEW:*** You can actually [include your favorite webframework](test_framework.py) now, easily.  
 
-Please [retweet](https://twitter.com/drandreaskruger/status/706103743482368001) or [probably better this one](https://twitter.com/drandreaskruger/status/706115609394868226), thx. 
+Please [retweet](https://twitter.com/drandreaskruger/status/706115609394868226), thx. 
 
 ## Donationware
 Very important - **If you like this, show it:** `` [BTC] 14EyWS5z8Y5kgwq52D3qeZVor1rUsdNYJy ``. Thanks, much appreciated.  
