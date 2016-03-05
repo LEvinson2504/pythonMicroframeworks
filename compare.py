@@ -14,7 +14,7 @@
            http://nuald.blogspot.de/2011/08/web-application-framework-comparison-by.html
 '''
 
-VERSION=                   "0.4.0"
+VERSION=                   "0.4.1"
 
 import os, time, sys, multiprocessing, subprocess, threading
 from collections import Counter
