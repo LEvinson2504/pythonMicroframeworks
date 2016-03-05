@@ -25,6 +25,8 @@ def run_flask_simplest():
     app.run()
     
 def run_server(host='127.0.0.1', port=5000):
+    print "Flask", 
+    import time; time.sleep(0.1) # only because of printing
     app.run(host=host, port=port)
     
 def url(host='127.0.0.1', port=5000):

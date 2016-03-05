@@ -22,7 +22,7 @@ from multiprocessing import Process
 import psutil # pip install psutil
 # print psutil.__version__
 
-import test_bottle, test_webpy, test_flask
+import test_bottle, test_webpy, test_flask, test_cherrypy, test_tornado
 
 def memory_usage(PID=None):
     # if PID==None: PID=os.getpid() # default psutil behaviour anyways
@@ -34,7 +34,7 @@ def memory_usage(PID=None):
 
 
 
-def startProcesses(host="localhost", portstart=8000):
+def startProcesses(host="127.0.0.1", portstart=8000):
     
     print "Memory main process: ", memory_usage()
     print "Start processes:"
@@ -47,7 +47,7 @@ def startProcesses(host="localhost", portstart=8000):
                        (test_webpy.run_webpy, test_webpy.version, test_webpy.url),
                        ()):
        """
-    for module in ((test_bottle, test_webpy, test_flask)):
+    for module in ((test_bottle, test_webpy, test_flask, test_cherrypy, test_tornado)):
         run_server=getattr(module, 'run_server')
         v=getattr(module, 'version')
         url=getattr(module, 'url')
@@ -58,11 +58,14 @@ def startProcesses(host="localhost", portstart=8000):
         processes.append((p, "%s %s" % v(), url(host,port) ))
         port+=1
         
-        time.sleep(sleepBetween)
+        if module==test_cherrypy: time.sleep(2)
+        elif module==test_tornado: time.sleep(1) 
+        else: time.sleep(sleepBetween)
         
     sleep=1
     time.sleep(sleep)
-    print "Waited %s seconds." % sleep
+    print
+    print "Waited %s seconds, measuring now." % sleep
     print 
     
     formatter="%-18s %7s PID=%5d MEM(rss,vms)=(%4.2f,%6.2f) MiB  %s"
