@@ -19,7 +19,7 @@ from bottle import route, run, __version__ # pip install bottle
 HOST, PORT= '127.0.0.1', 8080
 
 @route('/hello/:name')
-def index(name='World'):
+def index(name='Earth'):
     return 'Hello %s!' % name
 
 def run_server(host=HOST, port=PORT):

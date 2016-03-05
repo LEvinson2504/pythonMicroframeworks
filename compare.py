@@ -3,6 +3,7 @@
            compare.py
     
 @summary:  Comparing (RAM usage) of different webframeworks
+
 @since:    4 Mar 2016
 @author:   Andreas
 @home      github.com/drandreaskrueger/pythonMicroframeworks
@@ -14,17 +15,19 @@
            http://nuald.blogspot.de/2011/08/web-application-framework-comparison-by.html
 '''
 
-VERSION=                   "0.4.1"
+VERSION=                   "0.4.2"
 
-import os, time, sys, multiprocessing, subprocess, threading
+import os, time, sys, subprocess, threading
 from collections import Counter
-
-# pip install psutil requests bottle cherrypy Flask tornado web.py
 import psutil   # pip install psutil
 import requests # pip install requests
 
 # mine:
 import test_bottle, test_webpy, test_flask, test_cherrypy, test_tornado
+
+# add yours here (plus see 'test_framework.py')
+FRAMEWORKS = ("bottle", "webpy", "flask", "cherrypy", "tornado")
+# pip install psutil requests bottle cherrypy Flask tornado web.py
 
 # for hammering:
 REPETITIONS=800
@@ -37,16 +40,15 @@ def startProcessesTotallyIndependent(portstart=8000, stdout=sys.stdout, stderr=s
     Start all the frameworks, and return their (process, name&version, and url).
      
     This one works. And the memory measurement is independent. Not like in 'obsolete.py'.
-    
     This starts the processes as completely separate 'python name.py 8888' subprocesses.
     """ 
     
-    print "Started independent subprocesses:", 
+    print "Started these independent subprocesses:", 
     processes=[]
     port=portstart
     sleepBetween=0.3
     
-    for framework in ("bottle", "webpy", "flask", "cherrypy", "tornado"):
+    for framework in FRAMEWORKS:
         
         module_name="test_%s" % framework
         
@@ -54,22 +56,23 @@ def startProcessesTotallyIndependent(portstart=8000, stdout=sys.stdout, stderr=s
         p=subprocess.Popen(["python", module_name+".py", "%d" % port], 
                            stdout=stdout, stderr=stderr) 
         
-        module=globals()[module_name]                                # like 'import test_bottle'
-        v, url = getattr(module, 'version'), getattr(module, 'url')  # like 'test_bottle.url'
+        module=globals()[module_name]                                 # like 'import test_bottle'
+        v, url = getattr(module, 'version'), getattr(module, 'url')   # like 'url=test_bottle.url'
         
-        processes.append([ p, "%s %s" % v(), url(port=port)] ) # keep PID, and name, and url
+        processes.append([ p,               # keep PID,
+                          "%s %s" % v(),    # and name version, 
+                          url(port=port)] ) # and url
         
-        # some of them need a bit longer to start, sleepwait for clustered printing
+        # some of them need a bit longer to start, sleepwait for clustered log printing
         if v()[0]=="cherrypy": time.sleep(1.0)  
         elif v()[0]=="tornado": time.sleep(0.5) 
         else: time.sleep(sleepBetween)
         
-        print framework,
+        print "%s (%d)" % (framework, p.pid), 
         port += 1 # continue with one-up
         
     print
     return processes
-        
 
 
 def memory_usage(pid=None):
@@ -113,7 +116,7 @@ def measureMemory(processes):
 ####################
 
 def killEm(processes):
-    """don't leave zombie processes"""
+    """Don't leave zombie processes."""
     
     print "\nKilling PIDs:", 
     for p, name, _ in processes:
