@@ -19,12 +19,19 @@
 VERSION=                   "0.2.0"
 
 import os, time, sys, multiprocessing, subprocess, threading
-import psutil # pip install psutil
-import requests # pip install requests
-
 from collections import Counter
 
+# pip install psutil requests bottle cherrypy Flask tornado web.py
+import psutil   # pip install psutil
+import requests # pip install requests
+
+# mine:
 import test_bottle, test_webpy, test_flask, test_cherrypy, test_tornado
+
+# for hammering:
+REPETITIONS=800
+TIMEOUT=1.0
+
 
 def startProcessesTotallyIndependent(portstart=8000, stdout=sys.stdout, stderr=sys.stderr):
     """
@@ -112,8 +119,6 @@ def hammer_thread(url, results, timeout):
     else:
         results.append(response.status_code)
 
-TIMEOUT=20
-    
 def hammer(url, rep, timeout=TIMEOUT):
     T=time.time()
     threads, results = [],[]
@@ -126,9 +131,6 @@ def hammer(url, rep, timeout=TIMEOUT):
     duration = time.time()-T
     return duration, Counter(results)
     
-
-REPETITIONS=10
-
 def test_hammer(rep=REPETITIONS):
     url="http://www.google.de"
     t,C=hammer(url, rep)
@@ -183,6 +185,10 @@ def measure2(rep=REPETITIONS, timeout=TIMEOUT):
 if __name__ == '__main__':
     # test_hammer()
     
-    measure2(rep=800, timeout=1)
+    from sys import argv as a
+    rep    =  int(a[1]) if len(a)>1 else REPETITIONS 
+    timeout=float(a[2]) if len(a)>2 else TIMEOUT
+    
+    measure2(rep=rep, timeout=timeout)
     
     
