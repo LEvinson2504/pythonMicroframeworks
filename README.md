@@ -15,6 +15,8 @@ Prepare machine with tools and python pip; and upgrade pip, and install all fram
     apt-get update && apt-get install -y git nano sudo python-pip build-essential python-dev
     pip install -U pip && pip install bottle cherrypy Flask tornado web.py psutil requests
     
+(tested in the cloud, on a Debian 8 [Digitalocean droplet](https://m.do.co/c/f934b16d6302) - make sure you [bookmark my excellent manual](https://github.com/drandreaskrueger/buyme/blob/master/_how-to/VPS.md) how to run django there) 
+    
 Get my sourcecode:
 
     git clone https://github.com/drandreaskrueger/pythonMicroframeworks.git
