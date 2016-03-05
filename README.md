@@ -41,7 +41,8 @@ See
 * There is a big discrepancy between ``rss``, and ``vms`` memory usage on Linux and Windows, see [psutil](http://pythonhosted.org/psutil/#psutil.Process.memory_info) tool. Hopefully, psutil 4.0.0 [will be more useful](http://pythonhosted.org/psutil/#psutil.Process.memory_full_info), my 3.3.0 does not have ``memory_full_info()`` yet.
 * All my measurements show much more memory usage than in this [2011 examination](http://nuald.blogspot.de/2011/08/web-application-framework-comparison-by.html) - but those were older versions, too.
 * *web.py* is slower, especially on Windows, hammering takes ~60% longer as for any of the others.
-* *web.py* is the first to timeout.
+* *web.py* is the first to timeout on windows.
+* *tornado* is the first to timeout on Linux.
 * After hammering, the memory usage is higher.
   * only for *bottle*, the effect is < 1%. *Bottle seems to have the best memory management.*
   * *all* the other frameworks need considerably more memory after 2000 url requests.

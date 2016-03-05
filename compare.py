@@ -10,14 +10,11 @@
 @license:  MIT but please donate:
 @bitcoin:  14EyWS5z8Y5kgwq52D3qeZVor1rUsdNYJy
 
-@thanks:   to Kevin Veroneau. I based parts of this on his code snippets. 
-           http://www.pythondiary.com/blog/Feb.14,2012/too-many-micro-webframeworks.html
-           
-           also see these memory measurements:
+@thanks:   also see these older memory measurements:
            http://nuald.blogspot.de/2011/08/web-application-framework-comparison-by.html
 '''
 
-VERSION=                   "0.3.9"
+VERSION=                   "0.4.0"
 
 import os, time, sys, multiprocessing, subprocess, threading
 from collections import Counter
@@ -33,6 +30,7 @@ import test_bottle, test_webpy, test_flask, test_cherrypy, test_tornado
 REPETITIONS=800
 TIMEOUT=1.0
 
+NAME=os.path.split(__file__)[-1]
 
 def startProcessesTotallyIndependent(portstart=8000, stdout=sys.stdout, stderr=sys.stderr):
     """
@@ -109,7 +107,7 @@ def measureMemory(processes):
         print formatter % (name, osname, p.pid, mem[0], mem[1], url)  
     
     mem=memory_usage()
-    print formatter % ("main "+VERSION, osname, os.getpid(), mem[0], mem[1], "")
+    print formatter % (NAME+" "+VERSION, osname, os.getpid(), mem[0], mem[1], "")
     
 
 ####################
@@ -170,7 +168,7 @@ def hammerLocalhost(processes, rep=REPETITIONS, timeout=TIMEOUT):
     """
     
     print"\nNow hammering each of those servers ",
-    print "%d times, with a %.1f seconds timeout: " % (rep, timeout), 
+    print "%d times, with a %.3f seconds timeout: " % (rep, timeout), 
     time.sleep(1)
     
     results=[]
@@ -183,7 +181,7 @@ def hammerLocalhost(processes, rep=REPETITIONS, timeout=TIMEOUT):
         results.append(m)
         print m["name"].split(" ")[0], 
         
-    print "- Done"
+    print "- Done."
     print "Concurrent hammering %d * %d urls took %4.1f secs." % (len(processes), rep, time.time() - T),
     print "Results: (200 = OK; -1 = exception, probably 'requests.exceptions.ReadTimeout')"
     print

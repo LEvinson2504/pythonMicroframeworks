@@ -9,8 +9,6 @@
 @license:  MIT but please donate:
 @bitcoin:  14EyWS5z8Y5kgwq52D3qeZVor1rUsdNYJy
 
-@thanks:   to Kevin Veroneau. I based parts of this on his code snippets. 
-           http://www.pythondiary.com/blog/Feb.14,2012/too-many-micro-webframeworks.html
            
 '''
 
