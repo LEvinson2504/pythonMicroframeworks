@@ -63,6 +63,29 @@ Memory measurement via ``psutil``:
 ... before my final verdict, I guess I need to sleep. This was ~9 hours of straight coding. *After* a full working day. :-) 
   
 
+## Punchcard
+Using my [cool new tool](https://github.com/drandreaskrueger/FiledatePunchcard), this is a *very inaccurate* work time estimation:
+
+    errors = False, accesstimes = True, granularity = 20, fillsize = 60, ignore = True, omit = False
+    C:\...\github-drandreaskrueger-pythonMicroframeworks
+    Found 612 times, of which 335 are unique,
+    between 2016-03-04 22:21:55,
+        and 2016-03-05 15:07:00.
+
+    Each 'x' represents a 20 minute block:
+    2016-03-04|-------------------------------------------------------------------x  xx|
+    2016-03-05|xxxxx xxxxx   x  xxx xxx  x               xxxx--------------------------|
+    With 20-minute blocks, the number of hours is approx 8.3
+
+    Filling up blocks of size 3, i.e. pauses of approx 60 minutes.
+
+    Each 'x' represents a 20 minute block:
+    2016-03-04|-------------------------------------------------------------------xxxxx|
+    2016-03-05|xxxxxxxxxxxxxxxxxxxxxxxxxxx               xxxx--------------------------|
+    With 20-minute blocks, the number of hours is approx 12.0
+
+In this case it works out pretty accurate, it was one long work flow until I collapsed into bed, and slept 4 hours.
+
 ### You
 Please help, fork it, improve it. It was a one-night-hack. Not everything is super-elegant yet. But it works.  
 ***NEW:*** You can actually [include your favorite webframework](test_framework.py) now, easily.  
@@ -72,5 +95,3 @@ Please [retweet](https://twitter.com/drandreaskruger/status/706115609394868226),
 ## Donationware
 Very important - **If you like this, show it:** `` [BTC] 14EyWS5z8Y5kgwq52D3qeZVor1rUsdNYJy ``. Thanks, much appreciated.  
 *No Coinbase account yet?* Then [use my referral](https://www.coinbase.com/join/andreaskrueger), to give me and you 10$ bonus.  Oh yes, you can also hire me, part time.
-
-
