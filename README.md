@@ -10,18 +10,22 @@ Each can be started standalone (see ``test_frameworkname.py``), and serves a "He
  
 ### Quickstart
 
-Dependencies - Prepare machine with tools and python pip; and upgrade pip, and install all frameworks:
-
-    apt-get update && apt-get install -y git nano sudo python-pip build-essential python-dev
-    pip install -U pip && pip install bottle cherrypy Flask tornado web.py psutil requests
-    
-(tested in the cloud, on Debian 8 [Digitalocean VPS](https://m.do.co/c/f934b16d6302) - bookmark [my superb manual](https://github.com/drandreaskrueger/buyme/blob/master/_how-to/VPS.md) how to initialize & install django there.) 
-    
 Get my (comparison & 5 servers) sourcecode:
 
     git clone https://github.com/drandreaskrueger/pythonMicroframeworks.git
     cd pythonMicroframeworks
+
+Dependencies - Prepare machine with tools and python 2.7 pip; and upgrade pip, and install all frameworks:
+
+    apt-get update && apt-get install -y git nano sudo python-pip build-essential python-dev
+    virtualenv env; source env/bin/activate; python --version  # Python 2.7.16 - see issue 1
+    pip install -U pip && pip install bottle cherrypy Flask tornado web.py psutil requests
     
+Tested on my machine in 2020 on Debian 10 Buster. And 2016 in the cloud, on Debian 8 [Digitalocean VPS](https://m.do.co/c/f934b16d6302) - bookmark [my superb manual](https://github.com/drandreaskrueger/buyme/blob/master/_how-to/VPS.md) how to initialize & install django there. These are the library versions used in 2020:
+
+    pip freeze | grep "bottle\|CherryPy\|Flask\|tornado\|web.py"
+    # bottle==0.12.18, CherryPy==17.4.2, Flask==1.1.2, tornado==5.1.1, web.py==0.51
+
 **Start comparison with**
 
     python compare.py 
@@ -39,6 +43,7 @@ If -for hammering- you want more repetitions (per framework) and different timeo
 Put 
 * [results_windows.txt](results_windows.txt)
 * [results_linux.txt](results_linux.txt)
+* [results_linux_2020.txt](results_linux_2020.txt) with newer versions of everything
 
 besides each other in two windows, for now. (ToDo: Everything into one table.)
 
@@ -87,8 +92,9 @@ Using my [cool new tool](https://github.com/drandreaskrueger/FiledatePunchcard),
 In this case it works out pretty accurate, it was one long work flow until I collapsed into bed, and slept 4 hours.
 
 ### You
-Please help, fork it, improve it. It was a one-night-hack. Not everything is super-elegant yet. But it works.  
-***NEW:*** You can actually [include your favorite webframework](test_framework.py) now, easily.  
+Suggestion: Migrate all this [from Python 2.7.16 to Python 3.x = Solve issue 1](https://github.com/drandreaskrueger/pythonMicroframeworks/issues/1). Thanks.
+
+Please help, fork it, improve it, pull request. It was a one-night-hack. Not everything is super-elegant yet. But it works. You can actually [include your favorite webframework](test_framework.py) now, easily.  
 
 Please [retweet](https://twitter.com/drandreaskruger/status/706115609394868226), thx. 
 
