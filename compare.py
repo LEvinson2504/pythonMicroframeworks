@@ -172,6 +172,7 @@ def hammerLocalhost(processes, rep=REPETITIONS, timeout=TIMEOUT):
     
     print"\nNow hammering each of those servers ",
     print "%d times, with a %.3f seconds timeout: " % (rep, timeout), 
+    sys.stdout.flush()
     time.sleep(1)
     
     results=[]
